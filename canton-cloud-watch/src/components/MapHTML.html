@@ -1,0 +1,134 @@
+<html>
+    <head>
+        <title>Bus Tracker App</title>
+        <!-- Include the Google Maps JavaScript API -->
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CallPHLfq-OiM41ZHfPJiBFxEM9YdTs"></script>
+        <style>
+            /* Set the height of the map container */
+            #map {
+                height: 500px;
+            }
+        </style>
+    </head>
+    <body>
+        <!-- Map container -->
+        <div id="map"></div>
+
+        <!-- Add buttons for each bus route -->
+        <div>
+            <button id="toggleRouteBtn">Toggle Route</button>
+        </div>
+
+        <!-- Include the JavaScript code -->
+        <script>
+
+        // Create the map with the starting location
+    
+            // Initialize the map
+            function initMap() {
+                var routeDisplayed = false;
+                var map = new google.maps.Map(document.getElementById('map'), {
+                    center: {lat: 42.34852, lng: -83.49356},
+                    zoom: 15
+                });
+
+                // Display the selected route on the map
+                function displayRoute(route) {
+                    drawPolylineOnMap(map, route);
+                }
+                var routes = {
+                    route1: [
+                    {lat: 42.30760, lng: -83.48066}, 
+                    {lat: 42.30523, lng: -83.47569},
+                    {lat: 42.30714, lng: -83.47502},
+                    {lat: 42.30858, lng: -83.47005},
+                    {lat: 42.31044, lng: -83.47146}, 
+                    {lat: 42.30855, lng: -83.47231}, 
+                    {lat: 42.30949, lng: -83.47599}, 
+                    {lat: 42.34866, lng: -83.49574},
+                    ]
+                };
+                var stops = [{lat: 42.30760, lng: -83.48066}, 
+                {lat: 42.30523, lng: -83.47569},
+                {lat: 42.30714, lng: -83.47502},
+                {lat: 42.30858, lng: -83.47005},
+                {lat: 42.31044, lng: -83.47146}, 
+                {lat: 42.30855, lng: -83.47231}, 
+                {lat: 42.30949, lng: -83.47599}, 
+                {lat: 42.34866, lng: -83.49574}];
+
+                var buses = [{lat: 42.34852, lng: -83.49350}, 
+                {lat: 42.348, lng: -83.49350}
+                ];
+
+                function displayRoute(routeBtn) {
+                    var directionsService = new google.maps.DirectionsService();
+                    var directionsRenderer = new google.maps.DirectionsRenderer({
+                        polylineOptions: {
+                            strokeColor: "blue"
+                        }
+                    });
+                    directionsRenderer.setMap(map);
+                    var start = {lat: 42.34852, lng: -83.49356};
+                    var end = {lat: 42.34866, lng: -83.49574};
+                    var waypts = [
+                        {location: {lat: 42.30760, lng: -83.48066}},
+                        {location: {lat: 42.30523, lng: -83.47569}},
+                        {location: {lat: 42.30714, lng: -83.47502}},
+                        {location: {lat: 42.30858, lng: -83.47005}},
+                        {location: {lat: 42.31044, lng: -83.47146}},
+                        {location: {lat: 42.30855, lng: -83.47231}},
+                        {location: {lat: 42.30949, lng: -83.47599}}
+                    ];
+                    var request = {
+                        origin: start,
+                        destination: end,
+                        waypoints: waypts,
+                        optimizeWaypoints: true,
+                        travelMode: google.maps.TravelMode.DRIVING
+                    };
+                    directionsService.route(request, function(result, status) {
+                        if (status == 'OK') {
+                            directionsRenderer.setDirections(result);
+                        } else {
+                            alert('Directions request failed due to ' + status);
+                        }
+                    });
+                        
+                    var marker = new google.maps.Marker({
+                        position: {lat: 42.327331, lng: -83.488155},
+                        map,
+                        title: "Bus ",
+                        icon: {
+                            url: "https://cdn-icons-png.flaticon.com/512/3448/3448339.png",
+                            scaledSize: new google.maps.Size(40, 40)
+                        }
+                    });
+                    var infoWindow = new google.maps.InfoWindow({
+                        content: "Arriving in 10 minutes"
+                    });
+
+                    marker.addListener("click", () => {
+                        infoWindow.open(map, marker);
+                    });
+
+                }
+                function toggleRoute() {
+                    if (routeDisplayed) {
+                        directionsRenderer.setMap(null);
+                        routeDisplayed = false;
+                    } else {
+                        displayRoute(document.getElementById('Bus 40'));
+                        routeDisplayed = true;
+                    }
+                }
+
+                // Add event listeners to the buttons
+                document.getElementById('toggleRouteBtn').addEventListener('click', toggleRoute);
+            }
+        </script>
+        <script async defer
+            src="https://maps.googleapis.com/maps/api/js?key=AIzaSyA6CallPHLfq-OiM41ZHfPJiBFxEM9YdTs&callback=initMap">
+        </script>
+    </body>
+</html>
