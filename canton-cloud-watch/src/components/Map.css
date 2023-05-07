@@ -1,0 +1,16 @@
+/* //set height of map container */
+#map {
+    height: 100vh;
+}
+
+#toggleRouteBtn {
+    margin: 20px;
+    height: 50px;
+    background-color: rgb(123, 93, 207);
+    color: white;
+    z-index: 100;
+}
+
+#toggleRouteBtn:hover {
+    background-color: rgb(140, 116, 206);
+}
